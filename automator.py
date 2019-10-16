@@ -7,7 +7,7 @@ import random
 
 
 class Automator:
-    def __init__(self, device: str, upgrade_list: list, harvest_filter:list, auto_task = False, auto_policy = True, speedup = True):
+    def __init__(self, device: str, upgrade_list: list, harvest_filter:list, auto_task = False, auto_policy = True, speedup = True, auto_shop = True):
         """
         device: 如果是 USB 连接，则为 adb devices 的返回结果；如果是模拟器，则为模拟器的控制 URL 。
         """
@@ -20,6 +20,7 @@ class Automator:
         self.auto_task = auto_task
         self.auto_policy = auto_policy
         self.loot_speedup = speedup
+        self.auto_shop = auto_shop
         
     def start(self):
         """
@@ -37,7 +38,12 @@ class Automator:
                 self.d.app_start("com.tencent.jgm")
                 self.appRunning = False
                 continue
-            
+
+            # 一进去不管有没有欢迎页，都点一下欢迎页的确定按钮 by scoful
+            self.d.click(0.498, 0.745)
+            # 再点掉有可能出现的升级页 by scoful
+            self.d.click(0.164, 0.96)
+
             # 判断是否可升级政策
             self.check_policy()
             # 判断是否可完成任务
@@ -72,6 +78,9 @@ class Automator:
             self.upgrade(self.upgrade_list)
             # 滑动屏幕，收割金币。
             self.swipe()
+
+            # 进商店拆红包和相册 by scoful
+            self.in_shop()
 
     def upgrade(self, upgrade_list):
         if not len(upgrade_list):
@@ -224,3 +233,39 @@ class Automator:
         for i in range(3):
             self.d.click(0.057, 0.919)
             short_wait()
+
+    def in_shop(self):
+        if not self.auto_shop:
+            return
+        print("进入商店页")
+        self.d.click(0.475, 0.945)
+        # 收集福气红包
+        time.sleep(1)
+        print("点击福气红包")
+        self.d.click(0.193, 0.356)
+        for i in range(3):
+            time.sleep(1)
+            self.d.click(0.475, 0.945)
+        # 收集多福红包
+        time.sleep(1)
+        print("点击多福红包")
+        self.d.click(0.501, 0.356)
+        for i in range(4):
+            time.sleep(1)
+            self.d.click(0.475, 0.945)
+        # 收集满福红包
+        time.sleep(1)
+        print("点击满福红包")
+        self.d.click(0.806, 0.354)
+        for i in range(5):
+            time.sleep(1)
+            self.d.click(0.475, 0.945)
+        # 收集相册
+        print("点击相册")
+        self.d.click(0.516, 0.728)
+        time.sleep(3)
+        self.d.click(0.286, 0.582)
+        time.sleep(1)
+        # 回到建设页
+        print("回到建设页")
+        self.d.click(0.078, 0.949)

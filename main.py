@@ -18,9 +18,10 @@ if __name__ == '__main__':
     policy = True # 是否自动升级政策
     task = True # 是否自动完成任务
     speed_up = True # 是否自动重启加速刷火车
+    in_shop = False # 是否自动进商店拆红包和相册 顺序是福气红包-多福红包-满福红包-相册，不管有没有足够的蓝星币，都点一轮 by scoful
     if b'connected' in subprocess.check_output('adb connect '+ MuMu):
         print("Successfully connected to MuMu.")
-    instance = Automator(MuMu, up_list, harvest_filter,auto_policy=policy,auto_task=task,speedup=speed_up)
+    instance = Automator(MuMu, up_list, harvest_filter,auto_policy=policy,auto_task=task,speedup=speed_up,auto_shop=in_shop)
     # 启动脚本。
     instance.start()
     
