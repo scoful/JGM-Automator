@@ -58,7 +58,7 @@ class Automator:
                 print("[%s] No Goods! Wait 2s."%time.asctime())
                 self.swipe()
                 time.sleep(2)
-                continue
+                # continue
             
             # 再看看是不是有货没收，如果有就重启app
             good_id = self._has_good()
